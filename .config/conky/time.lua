@@ -59,7 +59,8 @@ conky.config = {
 }
 
 conky.text = [[
-${alignc}${color9}${font Noto Sans:size=70:style=Thin}${time %I : %M} ${font Noto Sans:size=40}${time %p}
-${alignc}${font Noto Sans:size=30:style=Thin}${time %d %B}
-${alignc}${font Scribble:size=70}${time %A}
+${color9}${alignc}${font Noto Sans:size=70:style=Bold}${time %I} ${font Noto Sans:size=70:style=Thin}: ${time %M} ${font Noto Sans:size=30:style=Bold}${time %p}
+${hr}
+${alignc}${font Noto Sans:size=40}${time %d %B}
+${alignc}${font Autumn in November:size=50}${time %A}
 ]]
