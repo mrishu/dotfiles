@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Dependency - fd, fzy, zathura
+
+cd "$HOME"/Documents || exit 1
+doc=$(fd '.*\.(pdf|djvu|epub)$' | sed 's_\./__' |  fzy -l 50 -p "Zathura> ")
+[ -z "$doc" ] && exit
+zathura --fork "$doc"
+#setsid evince "$doc" > /dev/null 2> /dev/null & sleep 1
+#setsid okular "$doc" > /dev/null 2> /dev/null & sleep 1
+exit 0

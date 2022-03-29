@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# Dependency - xgetres
+
+# What does it do?
+# It substitutes color placeholders with the hexadecimal values of colors as defined in Xresources.
+# The placeholders must be of the format '%color%' which will be replaced by the value of '*.color' in Xresources.
+
+# The placeholders which will be substituted are: 
+# %background%, %foreground%,
+# %black%, %red%, %green%, %yellow%, %blue%, %magenta%, %cyan%, %white%,
+# %grey%, %red2%, %green2%, %yellow2%, %blue2%, %magenta2%, %cyan2%, %white2%.
+
+# The input filename must be 'filename.xtemplate'. The output filename will be 'filename'.
+# Otherwise the output filename will be 'filename.xfinal'.
+
+[ ! -e "$1" ] && printf "ERR: File does not exist\n" exit 1
+
+background=$(xgetres '*.background')
+foreground="$(xgetres '*.foreground')"
+black="$(xgetres '*.color0')"
+red="$(xgetres '*.color1')"
+green="$(xgetres '*.color2')"
+yellow="$(xgetres '*.color3')"
+blue="$(xgetres '*.color4')"
+magenta="$(xgetres '*.color5')"
+cyan="$(xgetres '*.color6')"
+white="$(xgetres '*.color7')"
+grey="$(xgetres '*.color8')"
+red2="$(xgetres '*.color9')"
+green2="$(xgetres '*.color10')"
+yellow2="$(xgetres '*.color11')"
+blue2="$(xgetres '*.color12')"
+magenta2="$(xgetres '*.color13')"
+cyan2="$(xgetres '*.color14')"
+white2="$(xgetres '*.color15')"
+
+filename=$(basename "$1")
+if printf "$filename" | grep -q '\.xtemplate$'; then
+    final_filename=$(printf "$filename" | sed 's_\(.*\)\.xtemplate$_\1_')
+else
+    final_filename="$basename.xfinal"
+fi
+
+sed "s/%background%/$background/g;
+s/%foreground%/$foreground/g;
+s/%black%/$black/g;
+s/%red%/$red/g;
+s/%green%/$green/g;
+s/%yellow%/$yellow/g;
+s/%blue%/$blue/g;
+s/%magenta%/$magenta/g;
+s/%cyan%/$cyan/g;
+s/%white%/$white/g;
+s/%grey%/$grey/g;
+s/%red2%/$red2/g;
+s/%green2%/$green2/g;
+s/%yellow2%/$yellow2/g;
+s/%blue2%/$blue2/g;
+s/%magenta2%/$magenta2/g;
+s/%cyan2%/$cyan2/g;
+s/%white2%/$white2/g;" "$1" > "$(dirname "$1")/$final_filename"

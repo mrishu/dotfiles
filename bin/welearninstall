@@ -1,0 +1,40 @@
+#!/bin/sh
+# Guide through welearn setup process
+
+DATA_DIR=~/.local/share/welearntui
+mkdir -p "$DATA_DIR"
+
+printf "Enter username: "
+read -r username
+printf "Enter password: "
+read -r password
+printf "%s\n%s" "$username" "$password" > "$DATA_DIR"/credentials.txt
+printf "The above information is saved in \033[35m~/.local/share/welearntui/\033[31mcredentials.txt\033[0m.\n"
+
+printf "\nEnter SAVE_DIR (Enter full path name like /home/user/Documents/Courses/Sem6 without ~ or environment variables): "
+read -r save_dir
+printf "%s" "$save_dir" > "$DATA_DIR"/save_dir.txt
+printf "The above information is saved in \033[35m~/.local/share/welearntui/\033[31msave_dir.txt\033[0m.\n"
+
+printf "\nPrevious course information (id.file) will be deleted now. Enter 'y/Y' to confirm: "
+read -r confirm
+if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+	rm -rf "$DATA_DIR/id.file"
+else
+	exit
+fi
+
+i=1
+while true; do
+	printf "\n** Course %s **\n" "$i"
+	printf "Enter Course ID (q to stop): "
+	read -r course_id
+	[ "$course_id" = "q" ] && break
+	printf "Enter Welearn ID: "
+	read -r welearn_id
+	printf "Enter Course Name: "
+	read -r course_name
+	printf "%s\t%s\t%s\n" "$course_id" "$welearn_id" "$course_name" >> "$DATA_DIR"/id.file
+	i=$(( i+1 ))
+done
+printf "The above information is saved in \033[35m~/.local/share/welearntui/\033[31mid.file\033[0m.\n"

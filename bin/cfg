@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Dependency: fzf, exa, bat
+
+# Gives fzf menu with appropriate preview according to file or directory
+file_dir_fzf() {
+	fzf --reverse --preview='[ -d {-1} ] && exa -la --color=always {-1} || bat --color=always --style=plain {-1}'
+}
+
+contents=$(sh "$HOME"/bin/configs.sh)
+while [ ! -f "$file" ]; do
+	file=$(printf "$contents" | file_dir_fzf  | awk '{print $NF}')
+	[ -z "$file" ] && exit
+	contents=$([ -d "$file" ] && find "$file" -maxdepth 1 -printf '%f\t %p\n' | sed '1d') # delete the first line which contains current directory
+done
+"$EDITOR" "$file"

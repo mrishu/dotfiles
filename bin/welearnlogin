@@ -1,0 +1,19 @@
+#!/bin/sh
+
+USERNAME="$1"
+PASSWORD="$2"
+
+DATA_DIR=$HOME/.local/share/welearntui
+
+# Curl login page to get request MoodleSession cookie as well as logintoken
+logintoken=$(curl -s -c /tmp/cookie1.txt https://welearn.iiserkol.ac.in/login/ | grep "logintoken" | sed 's_.*<input type="hidden" name="logintoken" value="\([^"]*\)".*_\1_')
+# Use that cookie and logintoken to get response MoodleSession cookie which will log you in
+curl -s -c "$DATA_DIR/cookie.txt" -b /tmp/cookie1.txt -X POST -F "anchor=" -F "logintoken=$logintoken" -F "username=$USERNAME" -F "password=$PASSWORD" https://welearn.iiserkol.ac.in/login/index.php > /tmp/welearnlogin.html
+
+error_page='This page should automatically redirect. If nothing is happening please use the continue link below.<br /><a href="https://welearn.iiserkol.ac.in/login/index.php">'
+if grep -q "$error_page" /tmp/welearnlogin.html; then
+	printf "\033[31mFailed!\033[0m\n"
+	exit 1
+fi
+printf "\033[32mSuccessful!\033[0m\n"
+exit 0

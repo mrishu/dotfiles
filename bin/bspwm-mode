@@ -1,0 +1,29 @@
+#!/bin/sh
+# Dependencies: bspc, awk, grep
+
+bspc subscribe report | while read -r report; do
+  desktop_layout=$(printf "%s" "$report" | awk -F ":" '{print $(NF-2)}')
+  node_state=$(printf "%s" "$report" | awk -F ":" '{print $(NF-1)}')
+  node_flags=$(printf "%s" "$report" | awk -F ":" '{print $(NF)}')
+  case "$desktop_layout" in
+    LT) printf "[]=" ;;
+    LM) printf "[$(bspc query -N -n .window -d focused | wc -l)]" ;;
+  esac
+  case "$node_state" in
+    TP) printf ", Pseudo" ;;
+    TF) printf ", ><>" ;;
+    T=) printf ", Full" ;;
+  esac
+  if printf "%s\n" "$node_flags" | grep -q '^G.*S.*$'; then
+    printf " | Sticky"
+  fi
+  if printf "%s\n" "$node_flags" | grep -q '^G.*P.*$'; then
+    printf " | Private"
+  fi
+  if printf "%s\n" "$node_flags" | grep -q '^G.*L.*$'; then
+    printf " | Locked"
+  fi
+  if printf "%s\n" "$node_flags" | grep -q '^G.*M.*$'; then
+    printf " | Marked"
+  fi
+done

@@ -1,0 +1,132 @@
+#!/bin/sh
+
+basic_help() {
+	printf "welearn: Shell Script to download files quickly from welearn.\n"
+	printf "USAGE: welearn [OPTIONS] <course_id>\n"
+	printf "  OPTIONS:\n"
+	printf "\t-f\tForce download resources and replace files of same name if present. (Should not be used with -n).\n"
+	printf "\t-n\tSkip downloading if file of same name present. (Should not be used with -f).\n"
+	printf "\t-a\tPut all available resources in download queue and does not show the fzf menu. (Can be paired with -f or -n).\n"
+	printf "\t-b\tStart blacklist mode.\n"
+	printf "\t-h\tPrint this help text.\n"
+}
+
+# Processing options
+replace_force=0
+select_all=0
+blacklist_mode=0
+while getopts fnabh opt; do
+	case "$opt" in
+		f) replace_force=1 ;;
+		n) replace_force=-1 ;;
+		a) select_all=1 ;;
+		b) blacklist_mode=1 ;;
+		h) basic_help && exit 0 ;;
+		\?) basic_help && exit 1 ;;
+	esac
+done
+shift $(( OPTIND-1 ))
+courseid="$1"
+[ -z "$courseid" ] && exit
+
+DATA_DIR="$HOME/.local/share/welearntui"
+welearnid=$(awk -F"\t" '$1=="'"$courseid"'" {print $2}' "$DATA_DIR"/id.file)
+[ -z "$welearnid" ] && printf "\033[31mERR\033[0m: WelearnID not found for \033[33m%s\033[0m in \033[35mid.file\033[0m!\n" "$courseid" && exit 1
+course_name=$(awk -F"\t" '$1=="'"$courseid"'" {print $3}' "$DATA_DIR"/id.file)
+[ -z "$course_name" ] && printf "\033[31mERR\033[0m: Course name not assigned for \033[33m%s\033[0m in \033[35mid.file\033[0m!\n" "$courseid" && exit 1
+
+# Check whether the required directory exists and create and cd into it
+SAVE_DIR="$(cat "$DATA_DIR"/save_dir.txt)"
+COURSE_DIR="$SAVE_DIR/$course_name"
+[ ! -d "$COURSE_DIR" ] && mkdir -p "$COURSE_DIR"
+cd "$COURSE_DIR" || exit
+
+# -- Getting page --
+username=$(awk 'NR==1' "$DATA_DIR"/credentials.txt)
+password=$(awk 'NR==2' "$DATA_DIR"/credentials.txt)
+
+# Get the required webpage and save it to /tmp/x.html
+printf "Trying to get the course page... "
+curl -s -b "$DATA_DIR"/cookie.txt "https://welearn.iiserkol.ac.in/course/view.php" --data-urlencode "id=$welearnid" > /tmp/x.html
+
+# Checking for errors
+login_error_page='This page should automatically redirect. If nothing is happening please use the continue link below.<br /><a href="https://welearn.iiserkol.ac.in/login/index.php">'
+# If logged out, ask user to log in and retry or automatically login
+if grep -q "$login_error_page" /tmp/x.html; then
+	printf "\033[31mFailed!\033[0m\n"
+	printf "\nYou are logged out! Tring to log in with given credentials in '\033[35m%s/credentials.txt\033[0m'... " "$DATA_DIR"
+	welearnlogin "$username" "$password"
+	status=$?
+	if [ "$status" -eq 1 ]; then
+		printf "\033[31mERR\033[0m: Login failed! Check credentials in '\033[35m%s/credentials.txt\033[0m' and try again." "$DATA_DIR"
+		exit 1
+	fi
+	printf "Trying to get the course page again... "
+	curl -s -b "$DATA_DIR"/cookie.txt "https://welearn.iiserkol.ac.in/course/view.php" --data-urlencode "id=$welearnid" > /tmp/x.html
+fi
+printf "\033[32mCompleted!\033[0m\n"
+
+# -- Scraping Data --
+
+# Extract the relevant part (yeah all data is on one line)
+sed -n '/<div role="main">/p' /tmp/x.html > /tmp/raw_welearn_data
+# Scrape data and store it in /tmp/$course.data.tmp
+sed 's_</li>_</li>\n_g'  /tmp/raw_welearn_data |\
+grep -o '<li class="activity resource modtype_resource.*' |\
+sed 's_.*href="\([^"]*\).*<span class="instancename">\(.*\)<span class="accesshide.*_\2\t\1_' > "/tmp/$courseid.data.tmp"
+
+# -- Resource selection --
+
+if [ "$select_all" -eq 1 ]; then
+	resources=$(cat "/tmp/$courseid.data.tmp")
+else
+	resources=$(awk -F "\t+" '{printf("\033[31m%s\033[0m\t%s\n", $1,$2)}' /tmp/"$courseid".data.tmp  | fzf --ansi --multi --reverse)
+fi
+[ -z "$resources" ] && exit 0
+
+if [ "$blacklist_mode" -eq 1 ]; then
+	printf "\n\033[33mResources:\033[0m\n%s\n\n\033[31m->>\033[0m Added to \033[35m%s/blacklist.txt\033[0m.\n" "$resources" "$COURSE_DIR"
+	printf "%s\n" "$resources" >> "$COURSE_DIR"/blacklist.txt && exit 0
+	exit 0
+fi
+
+# -- Downloading files --
+# Download the required files
+i=1
+numlinks=$(printf "%s" "$resources" | awk 'END {print NR}')
+touch "$COURSE_DIR"/blacklist.txt
+while [ "$i" -le "$numlinks" ]; do
+	line=$(printf "%s" "$resources" | awk 'NR=='"$i"'')
+	filename=$(printf "%s" "$line" | awk -F "\t+" '{print $1}')
+	downloadlink=$(printf "%s" "$line" | awk -F "\t+" '{print $2}')
+	if grep -q "$line" "$COURSE_DIR/blacklist.txt"; then
+		printf "Skipping resource '\033[31m%s\033[0m' as blacklisted in \033[35m%s/blacklist.txt\033[0m.\n" "$filename" "$COURSE_DIR"
+		i=$(( i + 1 ))
+		continue
+	fi
+	remote_name=$(curl -s --head -b "$DATA_DIR"/cookie.txt -L "$downloadlink" | grep -o 'filename=".*"' | sed 's_filename="\(.*\)"_\1_')
+	if [ -f "$COURSE_DIR/$remote_name" ]; then
+		if [ "$replace_force" -eq 1 ]; then
+			replace_choice="y"
+		elif [ "$replace_force" -eq -1 ]; then
+			replace_choice="n"
+		else
+			printf "\nFile '\033[31m%s\033[0m' already exists! Replace file [Y/n]? " "$remote_name"
+			read -r replace_choice
+		fi
+		if [ "$replace_choice" = "y" ] || [ "$replace_choice" = "Y" ]; then
+			printf "\nReplacing existing file '\033[31m%s\033[0m'!\n" "$remote_name"
+			rm "$COURSE_DIR/$remote_name"
+			curl -b "$DATA_DIR"/cookie.txt -JLO "$downloadlink"
+		else
+			printf "Skipping file '\033[31m%s\033[0m'!\n" "$remote_name"
+			# Touch once so that modified time has the same sort order as upload time in Welearn
+			touch "$COURSE_DIR/$remote_name"
+		fi
+	else
+		printf "\nDownloading file '\033[31m%s\033[0m'\n" "$remote_name"
+		curl -b "$DATA_DIR"/cookie.txt -JLO "$downloadlink"
+	fi
+	i=$(( i + 1 ))
+done
+exit 0

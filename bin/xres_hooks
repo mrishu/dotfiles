@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Uses: xres_substitute
+# Applies xres_substitute on required files.
+
+# For zathura
+printf "Modifying zathura\n"
+xres_substitute ~/.config/zathura/themes/zathura-xresources.xtemplate
+
+# For dunst
+printf "Modifying dunst\n"
+xres_substitute ~/.config/dunst/dunstrc.xtemplate
+
+# For alacritty
+printf "Modifying alacritty\n"
+xres_substitute ~/.config/alacritty/themes/xresources.yml.xtemplate
+
+# For conky
+printf "Modifying conky\n"
+xres_substitute ~/.config/conky/themes/xresources.lua.xtemplate

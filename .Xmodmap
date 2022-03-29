@@ -1,0 +1,4 @@
+! Remove mod1 modifier from Alt_R
+remove mod1 = Alt_R
+! Make Alt_R behave as Super_L
+keysym Alt_R = Super_L

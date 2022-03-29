@@ -1,0 +1,55 @@
+! background, foreground
+*.background: BACKGROUND
+*.foreground: FOREGROUND
+
+! black, grey
+*.color0: COLOR0
+*.color8: COLOR8
+
+! red, red2
+*.color1: COLOR1
+*.color9: COLOR9
+
+! green, green2
+*.color2: COLOR2
+*.color10: COLOR10
+
+! yellow, yellow2
+*.color3: COLOR3
+*.color11: COLOR11
+
+! blue, blue2
+*.color4: COLOR4
+*.color12: COLOR12
+
+! magenta, magenta2
+*.color5: COLOR5
+*.color13: COLOR13
+
+! cyan, cyan2
+*.color6: COLOR6
+*.color14: COLOR14
+
+! white, white2
+*.color7: COLOR7
+*.color15: COLOR15
+
+! Easy names for the colors
+#define BLACK COLOR0
+#define RED COLOR1
+#define GREEN COLOR2
+#define YELLOW COLOR3
+#define BLUE COLOR4
+#define MAGENTA COLOR5
+#define CYAN COLOR6
+#define WHITE COLOR7
+#define GREY COLOR8
+#define RED2 COLOR9
+#define GREEN2 COLOR10
+#define YELLOW2 COLOR11
+#define BLUE2 COLOR12
+#define MAGENTA2 COLOR13
+#define CYAN2 COLOR14
+#define WHITE2 COLOR15
+
+! vim:set ft=xdefaults:

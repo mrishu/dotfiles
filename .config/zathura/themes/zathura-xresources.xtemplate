@@ -1,0 +1,40 @@
+# Template file with placeholders to be replaced with script
+
+set default-bg 			"%background%"
+set default-fg 			"%foreground%"
+
+set completion-bg		       "%background%"
+set completion-fg		       "%foreground%"
+set completion-highlight-bg	   "%grey%"
+set completion-highlight-fg	   "%blue%"
+set completion-group-bg		   "%background%"
+set completion-group-fg		   "%magenta%"
+
+set statusbar-bg		    "%grey%"
+set statusbar-fg		    "%white%"
+
+set notification-bg             "%background%"
+set notification-fg             "%blue%"
+set notification-error-bg       "%red%"
+set notification-error-fg       "%black%"
+set notification-warning-bg     "%yellow%"
+set notification-warning-fg     "%black%"
+set selection-notification      true
+
+set inputbar-bg 		"%background%"
+set inputbar-fg			"%foreground%"
+
+set index-bg			"%background%"
+set index-fg			"%foreground%"
+set index-active-bg		"%grey%"
+set index-active-fg		"%blue%"
+
+set highlight-color		    "%blue%"
+set highlight-active-color	"%green%"
+
+set recolor			        true
+set recolor-lightcolor		"%background%"
+set recolor-darkcolor		"%foreground%"
+
+set render-loading-bg		"%background%"
+set render-loading-fg		"%foreground%"

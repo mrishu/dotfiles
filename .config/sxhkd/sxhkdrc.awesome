@@ -1,0 +1,46 @@
+# program launcher
+super + p
+	rofi -modi drun -show drun
+super + d
+	dmenu_run -c -l 20 -p Launch
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# exit awesome
+super + shift + e
+	[ $(printf "yes\nno" | rofi -dmenu -no-fixed-num-lines -theme-str 'entry \{placeholder: "";\}' -p "Quit awesome?") = "yes" ] && awesome-client 'awesome.quit()'
+
+# -- Volume Controls --
+super + {Up,Down}
+	pamixer -{i,d} 5 && val=$(pamixer --get-volume) && dunstify -h int:value:${val} \
+	-h string:x-dunst-stack-tag:volume "Volume" "${val}%"
+XF86Audio{Raise,Lower}Volume
+	pamixer -{i,d} 5 && val=$(pamixer --get-volume) && dunstify -h int:value:${val} \
+	-h string:x-dunst-stack-tag:volume "Volume" "${val}%"
+XF86AudioMute
+	pamixer -t && dunstify -h string:x-dunst-stack-tag:mute Mute $(pamixer --get-mute)!
+
+# -- Brightness Controls  --
+super + {Right,Left}
+	val=$(brightnessctl set {+10,10-}  | grep 'Curr' | sed 's/.*(\(.*\))/\1/') && \
+	dunstify -h int:value:${val} -h string:x-dunst-stack-tag:brightness "Brightness" "${val}"
+XF86MonBrightness{Up,Down}
+	val=$(brightnessctl set {+10,10-}  | grep 'Curr' | sed 's/.*(\(.*\))/\1/') && \
+	dunstify -h int:value:${val} -h string:x-dunst-stack-tag:brightness "Brightness" "${val}"
+
+# Take Screenshots
+Print
+	maim ~/Pictures/Screenshots/"$(date +%H:%M:%S-%d-%m-%Y).png" && notify-send "Screenshot Taken"
+
+shift + Print
+	maim -s ~/Pictures/Screenshots/"$(date +%H:%M:%S-%d-%m-%Y).png" && notify-send "Screenshot Taken"
+
+# Lock Screen
+super + shift + BackSpace
+	betterlockscreen -l dimblur
+
+# fdoc
+super + w
+	st -t fdoc -e fdoc

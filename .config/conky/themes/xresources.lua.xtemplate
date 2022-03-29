@@ -1,0 +1,22 @@
+Colors = {
+    background = '%background%',
+    foreground = '%foreground%',
+	color0 = '%black%',
+	color1 = '%red%',
+	color2 = '%green%',
+	color3 = '%yellow%',
+	color4 = '%blue%',
+	color5 = '%magenta%',
+	color6 = '%cyan%',
+	color7 = '%white%',
+	color8 = '%grey%',
+	color9 = '%red2%',
+	color10 = '%green2%',
+	color11 = '%yellow2%',
+	color12 = '%blue2%',
+	color13 = '%magenta2%',
+	color14 = '%cyan2%',
+	color15 = '%white2%',
+}
+
+return Colors

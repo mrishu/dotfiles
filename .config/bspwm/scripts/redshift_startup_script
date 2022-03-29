@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Get location by gps
+#location=$(curl -s "https://location.services.mozilla.com/v1/geolocate?key=geoclue" | awk 'OFS=":" {print $3,$5}' | tr -d ',}')
+# OR custom location with latitude:longitude
+location='22.574:88.3191' # IISER Kolkata
+killall -q redshift
+while pgrep -x redshift; do sleep 1; done
+redshift-gtk -P -l "$location" &

@@ -1,0 +1,11 @@
+include themes/zathura-xresources
+
+set window-title-basename true
+set font "monospace 11"
+set selection-clipboard clipboard
+set statusbar-h-padding		3
+set statusbar-v-padding		3
+set adjust-open     "width"
+set recolor false
+
+map <C-x> exec 'okular "%"'

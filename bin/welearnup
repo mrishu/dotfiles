@@ -1,0 +1,14 @@
+#!/bin/sh
+
+DATA_DIR=~/.local/share/welearntui
+id_file="$DATA_DIR"/id.file
+
+notify-send "Welearn Documents Update Started"
+while read -r line
+do
+	course_id=$(printf "$line" | awk -F "\t" '{print $1}')
+	course_name=$(printf "$line" | awk -F "\t" '{print $3}')
+	printf "\n-- \e[35mCourse\e[0m: $course_id: $course_name --\n"
+	welearn -na "$course_id"
+done < "$id_file"
+notify-send "Welearn Documents Updated"

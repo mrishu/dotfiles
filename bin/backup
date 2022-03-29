@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Dependency: rsync
+BACKUP_DRIVE_UUID="8b7f4da6-bb30-467d-9608-7418f3a82076"
+BACKUP_DIR="/mnt/backup"
+UUID_AT_BACKUP_DIR=$(lsblk -f | grep "$BACKUP_DIR" | awk '{print $4}')
+
+[ "$1" = "-d" ] && delete="--delete" || delete=""
+
+[ "$BACKUP_DRIVE_UUID" != "$UUID_AT_BACKUP_DIR" ] && printf "UUID of drive at $BACKUP_DIR doesn't match the UUID the backup drive as saved in the backup script.
+	i) Either the backup drive is not mounted.
+	ii) A wrong drive is mounted at $BACKUP_DIR.
+	iii) The UUID of the backup drive saved in the backup script is wrong.\n" && exit 1
+
+ROOT_UID=0
+[ $UID -ne $ROOT_UID ] && printf "Must be root user to run the script.\n" && exit 1
+
+USRHOME=/home/adi
+
+cd "$USRHOME" || exit
+rsync $delete --progress -Cavz .profile .xinitrc .Xmodmap .zsh .zshrc .todo bin Documents Music Pictures src Videos wiki "Downloads/Skyrim Special Edition" "$BACKUP_DIR"
+
+cd "$USRHOME"/.config || exit
+rsync $delete --progress -Cavz awesome bspwm conky dunst fontconfig kitty lf mimeapps.list mpv nvim picom.conf polybar redshift rofi sxhkd zathura "$BACKUP_DIR/.config"
+
+cd "$USRHOME"/.local/share || exit
+rsync $delete --progress -Cavz welearntui fonts "$BACKUP_DIR/.local/share"

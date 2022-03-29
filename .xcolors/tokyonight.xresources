@@ -1,0 +1,22 @@
+! Tokyonight colorscheme
+
+#define BACKGROUND #24283b
+#define FOREGROUND #c0caf5
+#define COLOR0 #1D202F
+#define COLOR1 #f7768e
+#define COLOR2 #9ece6a
+#define COLOR3 #e0af68
+#define COLOR4 #7aa2f7
+#define COLOR5 #bb9af7
+#define COLOR6 #7dcfff
+#define COLOR7 #a9b1d6
+#define COLOR8 #414868
+#define COLOR9 #f7768e
+#define COLOR10 #9ece6a
+#define COLOR11 #e0af68
+#define COLOR12 #7aa2f7
+#define COLOR13 #bb9af7
+#define COLOR14 #7dcfff
+#define COLOR15 #c0caf5
+
+! vim:set ft=xdefaults:

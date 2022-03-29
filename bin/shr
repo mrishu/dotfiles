@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[ -z "$1" ] && f="$(find . -maxdepth 1 -type f | cut -c3- | fzf)" || f="$1"
+[ -z "$f" ] && exit
+
+link=$(curl -F'file=@'"$f"'' https://0x0.st)
+printf "$link" | xclip -selection c
+notify-send "File Uploaded" "$link\n(Link in secondary clipboard)"
