@@ -1,0 +1,12 @@
+@theme "/usr/share/rofi/themes/gruvbox-dark-hard.rasi"
+
+configuration {
+    font:				    "FiraCode Nerd Font 12";
+    show-icons:				true;
+    icon-theme:				"Adwaita";
+    display-drun:			"Apps";
+    drun-display-format:	"{name}";
+    scroll-method:			0;
+    disable-history:		false;
+    sidebar-mode:			false;
+}

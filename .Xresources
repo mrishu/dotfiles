@@ -1,0 +1,34 @@
+! Colors
+#include "/home/adi/.xcolors/gruvbox-dark.xresources"
+#include "/home/adi/.xcolors/common.xresources"
+
+! st settings
+st.alpha:    0.9
+st.borderpx: 12
+st.font:     JetBrainsMono Nerd Font:size=13:style=Regular
+
+! dmenu settings
+dmenu.font: JetBrainsMono Nerd Font:size=13:style=Regular
+dmenu.normbgcolor: BACKGROUND
+dmenu.normfgcolor: FOREGROUND
+dmenu.selbgcolor: GREY
+dmenu.selfgcolor: FOREGROUND
+dmenu.normbghicolor: BACKGROUND
+dmenu.normfghicolor: RED
+dmenu.selbghicolor: GREY
+dmenu.selfghicolor: RED
+dmenu.borderwidth: 3
+
+! Nsxiv settings
+Nsxiv.window.background: BACKGROUND
+Nsxiv.window.foreground: FOREGROUND
+Nsxiv.bar.font: JetBrainsMono Nerd Font:size=12:style=Regular
+Nsxiv.bar.background: GREY
+Nsxiv.bar.foreground: FOREGROUND
+Nsxiv.mark.foreground: RED
+
+! bspwm settings
+bspwm.normal_border_color: BLACK
+bspwm.focused_border_color: RED
+bspwm.active_border_color: GREEN
+bspwm.presel_feedback_color: BLUE

@@ -1,0 +1,21 @@
+#define BACKGROUND    #1a1b26
+#define FOREGROUND    #a9b1d6
+
+#define COLOR0        #32344a
+#define COLOR1        #f7768e
+#define COLOR2        #9ece6a
+#define COLOR3        #e0af68
+#define COLOR4        #7aa2f7
+#define COLOR5        #ad8ee6
+#define COLOR6        #449dab
+#define COLOR7        #787c99
+#define COLOR8        #444b6a
+#define COLOR9        #ff7a93
+#define COLOR10       #b9f27c
+#define COLOR11       #ff9e64
+#define COLOR12       #7da6ff
+#define COLOR13       #bb9af7
+#define COLOR14       #0db9d7
+#define COLOR15       #acb0d0
+
+! vim:set ft=xdefaults:

@@ -1,0 +1,254 @@
+; -- COLORS --
+;               ▀▀█
+;  ▄▄▄    ▄▄▄     █     ▄▄▄    ▄ ▄▄
+; █▀  ▀  █▀ ▀█    █    █▀ ▀█   █▀  ▀
+; █      █   █    █    █   █   █
+; ▀█▄▄▀  ▀█▄█▀    ▀▄▄  ▀█▄█▀   █
+
+[colors]
+; Fallback to onedark
+background = ${xrdb:background:#1a1b26}
+foreground = ${xrdb:foreground:#a9b1d6}
+black = ${xrdb:color0:#32344a}
+red = ${xrdb:color1:#f7768e}
+green = ${xrdb:color2:#9ece6a}
+yellow = ${xrdb:color3:#e0af68}
+blue = ${xrdb:color4:#7aa2f7}
+magenta = ${xrdb:color5:#ad8ee6}
+cyan = ${xrdb:color6:#449dab}
+white = ${xrdb:color7:#787c99}
+grey = ${xrdb:color8:#444b6a}
+red2 = ${xrdb:color9:#ff7a93}
+green2 = ${xrdb:color10:#b9f27c}
+yellow2 = ${xrdb:color11:#ff9e64}
+blue2 = ${xrdb:color12:#7da6ff}
+magenta2 = ${xrdb:color13:#bb9af7}
+cyan2 = ${xrdb:color14:#0db9d7}
+white2 = ${xrdb:color15:#acb0d0}
+
+; -- BARS --
+; █
+; █▄▄▄    ▄▄▄    ▄ ▄▄   ▄▄▄
+; █▀ ▀█  ▀   █   █▀  ▀ █   ▀
+; █   █  ▄▀▀▀█   █      ▀▀▀
+; ██▄█▀  ▀▄▄▀█   █     ▀▄▄▄▀
+
+[bar/mybar]
+enable-ipc=true
+
+height = 28
+width = 100%
+
+border-size = 0
+border-color = ${colors.background}
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+font-0 = FiraCode Nerd Font:style=Bold:size=12:antialias=true:hinting=true;2
+
+wm-restack = bspwm
+
+cursor-click = pointer
+cursor-scroll = default
+
+modules-left = launcher bspwm bspwm-mode
+modules-center = clockicon time date day
+modules-right = pulseaudio backlight battery powermenu
+
+tray-position = right
+tray-padding = 4
+
+; --GLOBAL SETTINGS --
+;        ▀▀█           █             ▀▀█
+;  ▄▄▄▄    █     ▄▄▄   █▄▄▄    ▄▄▄     █
+; █▀ ▀█    █    █▀ ▀█  █▀ ▀█  ▀   █    █
+; █   █    █    █   █  █   █  ▄▀▀▀█    █
+; ▀█▄▀█    ▀▄▄  ▀█▄█▀  ██▄█▀  ▀▄▄▀█    ▀▄▄
+;  ▄  █
+;   ▀▀
+
+[settings]
+screenchange-reload = false
+
+compositing-background = source
+compositing-foreground = over
+compositing-overline = over
+compositing-underline = over
+compositing-border = over
+
+pseudo-transparency = false
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+; -- MODULES --
+;                   █         ▀▀█
+; ▄▄▄▄▄   ▄▄▄    ▄▄▄█  ▄   ▄    █     ▄▄▄    ▄▄▄
+; █ █ █  █▀ ▀█  █▀ ▀█  █   █    █    █▀  █  █   ▀
+; █ █ █  █   █  █   █  █   █    █    █▀▀▀▀   ▀▀▀▄
+; █ █ █  ▀█▄█▀  ▀█▄██  ▀▄▄▀█    ▀▄▄  ▀█▄▄▀  ▀▄▄▄▀
+
+; -- MODULES LFET --
+[module/launcher]
+type = custom/text
+content = 
+content-background = ${colors.green}
+content-foreground = ${colors.black}
+content-padding = 2
+click-left = rofi -modi drun -show drun -hover-select -me-select-entry '' -me-accept-entry MousePrimary
+
+[module/bspwm]
+type = internal/bspwm
+format = <label-state>
+index-sort = true
+
+enable-click = true
+reverse-scroll = true
+enable-scroll = true
+
+label-focused = %name%
+label-focused-foreground = ${colors.blue}
+label-focused-background = ${colors.grey}
+label-focused-padding = 1
+
+label-empty = %name%
+label-empty-foreground = ${colors.grey}
+label-empty-padding = 1
+
+label-occupied = %name%
+label-occupied-foreground = ${colors.blue}
+label-occupied-padding = 1
+
+label-urgent = %name%
+label-urgent-foreground = ${colors.black}
+label-urgent-background = ${colors.red}
+label-urgent-padding = 1
+
+format-padding = 1
+
+[module/bspwm-mode]
+type = custom/script
+exec = ~/.config/polybar/scripts/bspwm-mode.sh
+tail = true
+format-foreground = ${colors.magenta}
+click-left = bspc desktop -l next; bspc wm -g > /tmp/bspwm.fifo
+
+; -- MODULES CENTER --
+[module/clockicon]
+type = custom/text
+content = 
+content-foreground = ${colors.red2}
+
+[module/time]
+type = internal/date
+interval = 5
+format = <label>
+format-foreground = ${colors.yellow2}
+time = %I:%M %p
+label = " %time% "
+
+[module/date]
+type = internal/date
+interval = 5
+format = <label>
+format-foreground = ${colors.green2}
+date = "%b %d "
+label = %date%
+
+[module/day]
+type = internal/date
+interval = 5
+format = <label>
+format-foreground = ${colors.blue2}
+date = (%a)
+label = %date%
+
+; -- MODULES RIGHT --
+[module/pulseaudio]
+type = internal/pulseaudio
+use-ui-max = true
+
+enable-scroll = true
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+format-volume-foreground = ${colors.blue}
+format-volume-padding = 1
+
+label-muted =  Muted
+format-muted-foreground = ${colors.red2}
+format-muted-padding = 1
+
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+click-right = pavucontrol
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+
+enable-scroll = true
+interval = 5
+
+format = <ramp> <label>
+format-foreground = ${colors.yellow2}
+format-padding = 1
+
+label = %percentage%%
+
+ramp-0 = 
+
+[module/memory]
+type = internal/memory
+interval = 5
+label =  %gb_used%
+format = <label>
+format-padding = 1
+format-foreground = ${colors.magenta}
+
+[module/battery]
+type = internal/battery
+battery = BAT1
+adapter = ACAD
+
+format-charging = <animation-charging> <label-charging>
+format-charging-foreground = ${colors.blue}
+format-charging-padding = 1
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-foreground = ${colors.red}
+format-discharging-padding = 1
+
+format-full = <ramp-capacity>  <label-full>
+format-full-foreground = ${colors.green}
+format-full-padding = 1
+
+label-charging = Charging %percentage%%
+label-discharging = Discharging %percentage%%
+
+label-full = Full
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 750
+
+[module/powermenu]
+type = custom/text
+content = 
+content-background = ${colors.cyan2}
+content-foreground = ${colors.black}
+content-padding = 1
+click-left = rofi -show power-menu -modi power-menu:~/.config/bspwm/scripts/rofi-power-menu -hover-select -me-select-entry '' -me-accept-entry MousePrimary -no-fixed-num-lines
