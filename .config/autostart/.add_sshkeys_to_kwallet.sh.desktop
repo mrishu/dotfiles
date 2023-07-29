@@ -1,0 +1,18 @@
+[Desktop Entry]
+Comment[en_IN]=
+Comment=
+Exec=/home/adi/.add_sshkeys_to_kwallet.sh
+GenericName[en_IN]=
+GenericName=
+Icon=dialog-scripts
+MimeType=
+Name[en_IN]=.add_sshkeys_to_kwallet.sh_2_
+Name=.add_sshkeys_to_kwallet.sh_2_
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-AutostartScript=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=

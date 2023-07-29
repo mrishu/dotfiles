@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Uses: ~/.config/bspwm/scripts/xres_substitute
+
+# For bspwm
+bspwm_filename="$HOME/.config/bspwm/bspwmrc"
+printf "Modifying $bspwm_filename\n"
+~/.config/bspwm/scripts/xres_substitute "$bspwm_filename.xtemplate"
+
+# For dunst
+dunst_filename="$HOME/.config/dunst/dunstrc"
+printf "Modifying $dunst_filename\n"
+~/.config/bspwm/scripts/xres_substitute "$dunst_filename.xtemplate"
+
+# For conky
+conky_filename="$HOME/.config/conky/themes/colors.lua"
+printf "Modifying $conky_filename\n"
+~/.config/bspwm/scripts/xres_substitute "$conky_filename.xtemplate"
+
+# Note: polybar manages Xresources colors by itself

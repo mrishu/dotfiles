@@ -1,0 +1,147 @@
+# -- WM Independent --
+
+# terminal emulator
+super + Return
+	kitty
+
+# program launcher
+super + p
+	rofi -modi drun -show drun
+
+# make sxhkd reload its configuration files
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# -- bspwm hotkeys --
+# quit/restart bspwm
+super + shift + e
+    [ $(printf "yes\nno" | rofi -dmenu -no-fixed-num-lines -theme-str 'entry \{placeholder: "";\}' -p "Quit bspwm?") = "yes" ] && bspc quit
+
+super + shift + r
+	bspc wm -r
+
+# close and kill
+super + {_,shift + }q
+	bspc node -{c,k}
+
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next; bspc wm -g > /tmp/bspwm.fifo
+
+# send the newest marked node to the newest preselected node
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
+
+# swap the current node and the biggest node
+super + g
+	bspc node -s biggest
+
+
+# -- State Flags --
+# set the window state
+super + {t,shift + t,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# set the node flags
+super + ctrl + {m,x,y,z}
+	bspc node -g {marked,locked,sticky,private}
+
+
+# -- Focus Swap --
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+# focus the node for the given path jump
+super + {P,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+
+# focus the next/previous node in the current desktop
+super + {_,shift + }c
+	bspc node -f {next,prev}.local
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+	bspc desktop -f {prev,next}.local
+
+# focus the last node/desktop
+super + {grave,Tab}
+	bspc {node,desktop} -f last
+
+# focus the older or newer node in the focus history
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+
+# -- Preselect --
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+	bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+
+# -- Move + Resize Windows --
+# expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+super + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# move a floating window
+super + alt + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+
+# -- Volume Controls --
+super + {Up,Down}
+	pamixer --allow-boost --set-limit 153 -{i,d} 5 && val=$(pamixer --get-volume-human) && dunstify -h int:value:${val} \
+	-h string:x-dunst-stack-tag:volume "Volume" "${val}"
+XF86Audio{Raise,Lower}Volume
+	pamixer --allow-boost --set-limit 153 -{i,d} 5 && val=$(pamixer --get-volume-human) && dunstify -h int:value:${val} \
+	-h string:x-dunst-stack-tag:volume "Volume" "${val}"
+XF86AudioMute
+	pamixer -t && dunstify -h string:x-dunst-stack-tag:mute Mute $(pamixer --get-mute)!
+
+# -- Brightness Controls  --
+super + {Right,Left}
+	val=$(brightnessctl set {+5,5-}%  | grep 'Curr' | sed 's/.*(\(.*\))/\1/') && \
+	dunstify -h int:value:${val} -h string:x-dunst-stack-tag:brightness "Brightness" "${val}"
+XF86MonBrightness{Up,Down}
+	val=$(brightnessctl set {+5,5-}%  | grep 'Curr' | sed 's/.*(\(.*\))/\1/') && \
+	dunstify -h int:value:${val} -h string:x-dunst-stack-tag:brightness "Brightness" "${val}"
+
+# Take Screenshots
+Print
+	maim ~/Pictures/Screenshots/"Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png" && notify-send "Screenshot Taken"
+
+shift + Print
+	maim -s ~/Pictures/Screenshots/"Screenshot from $(date '+%Y-%m-%d %H-%M-%S').png" && notify-send "Screenshot Taken"
+
+# Lock Screen
+super + shift + BackSpace
+	betterlockscreen -l dimblur
+
+# Rename desktops on the go
+super + apostrophe
+	name="$(rofi -dmenu -no-fixed-num-lines -theme-str 'entry \{placeholder: "";\}' < /dev/null -c -p 'Rename Desktop')"; [ -n "$name" ] && bspc desktop --rename "$name"
+super + shift + apostrophe
+	bspc desktop --rename "$(sed -n $(grep -n $(bspc query -D -d 'focused') /tmp/bspwm-desktopids | cut -d : -f 1)p  /tmp/bspwm-desktopnames)"

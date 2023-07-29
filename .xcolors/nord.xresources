@@ -1,0 +1,47 @@
+! Copyright (c) 2016-present Arctic Ice Studio <development@arcticicestudio.com>
+! Copyright (c) 2016-present Sven Greb <code@svengreb.de>
+
+! Project:    Nord XResources
+! Version:    0.1.0
+! Repository: https://github.com/arcticicestudio/nord-xresources
+! License:    MIT
+
+#define nord0 #2E3440
+#define nord1 #3B4252
+#define nord2 #434C5E
+#define nord3 #4C566A
+#define nord4 #D8DEE9
+#define nord5 #E5E9F0
+#define nord6 #ECEFF4
+#define nord7 #8FBCBB
+#define nord8 #88C0D0
+#define nord9 #81A1C1
+#define nord10 #5E81AC
+#define nord11 #BF616A
+#define nord12 #D08770
+#define nord13 #EBCB8B
+#define nord14 #A3BE8C
+#define nord15 #B48EAD
+
+*.cursorColor:  nord4
+*fading: 35
+*fadeColor: nord3
+
+#define FOREGROUND   nord4
+#define BACKGROUND   nord0
+#define COLOR0 nord1
+#define COLOR1 nord11
+#define COLOR2 nord14
+#define COLOR3 nord13
+#define COLOR4 nord9
+#define COLOR5 nord15
+#define COLOR6 nord8
+#define COLOR7 nord5
+#define COLOR8 nord3
+#define COLOR9 nord11
+#define COLOR10 nord14
+#define COLOR11 nord13
+#define COLOR12 nord9
+#define COLOR13 nord15
+#define COLOR14 nord7
+#define COLOR15 nord6

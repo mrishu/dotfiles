@@ -1,0 +1,51 @@
+colors:
+  primary:
+    background: '%background%'
+    foreground: '%foreground%'
+    dim_foreground: '#a5abb6'
+  cursor:
+    text: '%black%'
+    cursor: '%white%'
+  vi_mode_cursor:
+    text: '%black%'
+    cursor: '%blue%'
+  selection:
+    text: CellForeground
+    background: '%grey%'
+  search:
+    matches:
+      foreground: CellBackground
+      background: '%cyan%'
+    focused_match:
+      foreground: CellBackground
+      background: '%red%'
+    bar:
+      background: '%grey%'
+      foreground: '%foreground%'
+  hints:
+    start:
+      foreground: CellBackground
+      background: '%yellow%'
+    end:
+      foreground: '%yellow%' 
+      background: CellBackground
+  normal:
+    black: '%black%'
+    red: '%red%'
+    green: '%green%'
+    yellow: '%yellow%'
+    blue: '%blue%'
+    magenta: '%magenta%'
+    cyan: '%cyan%'
+    white: '%white%'
+  bright:
+    black: '%grey%'
+    red: '%red2%'
+    green: '%green2%'
+    yellow: '%yellow2%'
+    blue: '%blue2%'
+    magenta: '%magenta2%'
+    cyan: '%cyan2%'
+    white: '%white2%'
+
+# vim:set ft=yaml:

@@ -1,0 +1,54 @@
+#!/bin/sh
+
+sudo dnf -y install bspwm sxhkd polybar rofi dunst libnotify brightnessctl picom xss-lock redshift-gtk conky \
+	maim nitrogen xsetroot lxappearance network-manager-applet \
+	polkit-gnome xinput kitty alacritty xsel
+
+[ -d "$HOME/src" ] || mkdir "$HOME/src"
+cd "$HOME/src"
+
+# install xgetres
+git clone https://github.com/tamirzb/xgetres
+cd xgetres
+sudo make install
+
+cd "$HOME/src"
+
+# install pamixer
+sudo dnf -y install meson rust-libpulse-sys-devel cxxopts-devel
+git clone https://github.com/cdemoulins/pamixer
+cd pamixer
+meson setup build
+sudo meson install -C build
+
+cd "$HOME/src"
+
+# install i3lock-color and betterlockscreen
+sudo dnf install -y autoconf automake cairo-devel fontconfig gcc libev-devel libjpeg-turbo-devel\
+	libXinerama libxkbcommon-devel libxkbcommon-x11-devel libXrandr pam-devel pkgconf xcb-util-image-devel xcb-util-xrm-devel
+git clone https://github.com/Raymo111/i3lock-color.git
+cd i3lock-color
+sudo ./install-i3lock-color.sh
+
+sudo dnf install -y xset
+wget https://raw.githubusercontent.com/betterlockscreen/betterlockscreen/main/install.sh -O - -q | sudo bash -s system
+
+cd "$HOME/src"
+
+# install Nerd Fonts
+git clone https://github.com/mrishu/nerd-fonts-installer
+sudo dnf install -y fzf
+printf "\n\033[31mNow download some Nerd Fonts. Use TAB to multi-select. (NOTE: Fira Code is used by default in configs)\033[0m\n Press Enter to continue...\n"
+read -r inp
+cd nerd-fonts-installer
+./nerdy.sh
+
+cd "$HOME/src"
+
+# copy configs
+# betterlockscreen -u "$HOME/Pictures/lockscreen.jpg"
+# nitrogen --set-auto "$HOME/Pictures/wallpaper.jpg"
+
+# install and set zsh as default shell
+sudo dnf install zsh exa util-linux-user
+chsh -s /bin/zsh

@@ -1,0 +1,22 @@
+! Everforest colorscheme
+
+#define BACKGROUND #323d43
+#define FOREGROUND #d8cacc
+#define COLOR0 #4a555b
+#define COLOR1 #e68183
+#define COLOR2 #a7c080
+#define COLOR3 #dbbc7f
+#define COLOR4 #7fbbb3
+#define COLOR5 #d699b6
+#define COLOR6 #83c092
+#define COLOR7 #d8caac
+#define COLOR8 #525c62
+#define COLOR9 #e68183
+#define COLOR10 #a7c080
+#define COLOR11 #dbbc7f
+#define COLOR12 #7fbbb3
+#define COLOR13 #d699b6
+#define COLOR14 #83c092
+#define COLOR15 #d8caac
+
+! vim:set ft=xdefaults:

@@ -1,0 +1,60 @@
+#!/bin/sh
+
+# Workspaces
+bspc monitor -d 1 2 3 4 5 6 7 8 9
+
+bspc config border_width	  4
+bspc config window_gap            10
+bspc config split_ratio           0.50
+bspc config borderless_monocle    true
+bspc config gapless_monocle       true
+bspc config single_monocle        true
+bspc config focus_follows_pointer true
+
+# colors
+bspc config normal_border_color "#1D202F" # black
+bspc config active_border_color "#9ece6a" # yellow
+bspc config focused_border_color "#e0af68" # green
+bspc config presel_feedback_color "#9ece6a" # yellow
+
+# rules
+bspc rule -a 'MATLAB R2023a - academic use' center=off,border=off
+
+# apply colors across all applications
+xrdb -merge ~/.Xresources
+~/.config/bspwm/scripts/xres_hooks
+
+# system tray
+nm-applet &
+#blueman-applet &
+~/.config/bspwm/scripts/redshift_startup_script
+
+# start sxhkd
+pkill sxhkd && while pgrep sxhkd; do sleep 1; done
+sxhkd &
+
+# autostart apps
+nitrogen --restore
+/usr/lib/polkit-kde-authentication-agent-1 &
+xss-lock --transfer-sleep-lock -- betterlockscreen -l dimblur &
+dunst &
+picom &
+dropbox start &
+/opt/xdman/jre/bin/java -Xmx1024m -jar /opt/xdman/xdman.jar -m &
+
+# set cursor right
+xsetroot -cursor_name left_ptr
+
+# Store bspwm desktop ids and original names for future renaming
+bspc query -D > /tmp/bspwm-desktopids
+bspc query -D --names > /tmp/bspwm-desktopnames
+
+# start polybar and conky
+~/.config/polybar/launch.sh
+# ~/.config/conky/launch.sh
+
+# touchpad tap to click and natural scroll
+# use 'xinput' to see touchpad device name
+touchpad_device=$(xinput | grep 'Touchpad' | awk '{print $3" "$4" "$5}')
+xinput set-prop "$touchpad_device" "libinput Tapping Enabled" 1
+xinput set-prop "$touchpad_device" "libinput Natural Scrolling Enabled" 1

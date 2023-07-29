@@ -1,0 +1,17 @@
+[Desktop Entry]
+Comment[en_IN]=
+Comment=
+Exec=zsh --extendedglob -c 'ssh-add -q ~/.ssh/id^*.pub < /dev/null'
+GenericName[en_IN]=Add ssh keys using ssh-add
+GenericName=Add ssh keys using ssh-add
+MimeType=
+Name[en_IN]=ssh-add
+Name=ssh-add
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-AutostartScript=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=
