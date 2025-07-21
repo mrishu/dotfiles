@@ -1,0 +1,23 @@
+clear
+ls
+clear
+ls
+fastfetch
+y
+clear
+ls
+clear
+y
+clear
+ls
+cd Pictures/
+ls
+clear
+cd
+clear
+micromamba
+sh -c (curl -L micro.mamba.pm/install.sh)
+clear
+micromamba
+.local/bin/micromamba 
+.local/bin/micromamba  activate
