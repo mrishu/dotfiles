@@ -5,7 +5,7 @@ set -euo pipefail
 main=(
     git eza yazi zsh zoxide nushell neovim wl-clipboard kitty
     pavucontrol firefox kdeconnect geoclue htop gwenview mpv vlc
-    man fzf docker docker-compose npm fd ripgrep lua51 luarocks
+    man fzf docker docker-compose npm fd ripgrep lua lua51 luarocks
     unrar lazygit tree-sitter-cli imagemagick ffmpeg firewalld yadm
     mermaid-cli python-pynvim glow
 )
