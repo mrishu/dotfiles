@@ -97,7 +97,38 @@ output "eDP-1" {
     // so to put another output directly adjacent to it on the right, set its x to 1920.
     // If the position is unset or results in an overlap, the output is instead placed
     // automatically.
-    position x=1280 y=0
+    position x=1536 y=0
+}
+
+output "HDMI-A-1" {
+    // Uncomment this line to disable this output.
+    // off
+
+    // Resolution and, optionally, refresh rate of the output.
+    // The format is "<width>x<height>" or "<width>x<height>@<refresh rate>".
+    // If the refresh rate is omitted, niri will pick the highest refresh rate
+    // for the resolution.
+    // If the mode is omitted altogether or is invalid, niri will pick one automatically.
+    // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
+    mode "1920x1080@60.0080"
+
+    // You can use integer or fractional scale, for example use 1.5 for 150% scale.
+    scale 1.25
+
+    // Transform allows to rotate the output counter-clockwise, valid values are:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // Position of the output in the global coordinate space.
+    // This affects directional monitor actions like "focus-monitor-left", and cursor movement.
+    // The cursor can only move between directly adjacent outputs.
+    // Output scale and rotation has to be taken into account for positioning:
+    // outputs are sized in logical, or scaled, pixels.
+    // For example, a 3840×2160 output with scale 2.0 will have a logical size of 1920×1080,
+    // so to put another output directly adjacent to it on the right, set its x to 1920.
+    // If the position is unset or results in an overlap, the output is instead placed
+    // automatically.
+    position x=0 y=0
 }
 
 // Settings that influence how windows are positioned and sized.
@@ -260,6 +291,7 @@ spawn-at-startup "swaybg" "-i" "/home/adi/.wall"
 spawn-at-startup "avizo-service"
 spawn-at-startup "mako"
 spawn-at-startup "/usr/lib/polkit-kde-authentication-agent-1"
+spawn-at-startup "/home/adi/.config/niri/scripts/start-gammastep.sh"
 
 
 // Uncomment this line to ask the clients to omit their client-side decorations if possible.
@@ -348,7 +380,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+P hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: gtklock" { spawn "gtklock"; }
+    Super+Escape hotkey-overlay-title="Lock the Screen: gtklock" { spawn "gtklock"; }
 
     // You can also use a shell. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument in the end.
@@ -587,7 +619,7 @@ binds {
     //
     // The allow-inhibiting=false property can be applied to other binds as well,
     // which ensures niri always processes them, even when an inhibitor is active.
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    // Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E { quit; }
@@ -603,4 +635,12 @@ environment {
 	"__GLX_VENDOR_LIBRARY_NAME" "nvidia"
 	"ELECTRON_OZONE_PLATFORM_HINT" "auto"
 	"QT_QPA_PLATFORMTHEME" "kde"
+    "QT_WAYLAND_DISABLE_WINDOWDECORATION" "1"
+    "QT_AUTO_SCREEN_SCALE_FATOR" "1"
+    "XCURSOR_SIZE" "24"
+    "GDK_BACKEND" "wayland,x11"
+    "SDL_VIDEODRIVER" "wayland,x11"
+    "CLUTTER_BACKEND" "wayland"
+    "_JAVA_AWT_WM_NONREPARENTING" "1"
+    "XDG_MENU_PREFIX" "arch-"
 }
